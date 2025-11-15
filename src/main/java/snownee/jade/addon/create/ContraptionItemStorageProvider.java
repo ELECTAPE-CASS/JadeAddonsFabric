@@ -44,7 +44,7 @@ public enum ContraptionItemStorageProvider implements IServerExtensionProvider<A
 			boolean showDetails) {
 		//TODO: simplify it in 1.20.2+
 		Contraption contraption = ((AbstractContraptionEntity) entity).getContraption();
-		Storage<ItemVariant> storage = contraption.getSharedInventory();
+		Storage<ItemVariant> storage = contraption.getStorage().getAllItems();
 		try {
 			return ItemStorageProvider.INSTANCE.containerCache.get(
 					storage,

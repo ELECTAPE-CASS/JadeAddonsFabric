@@ -8,8 +8,8 @@
 	},
 	"minVersion": "0.8",
 	"client": [
-		"create.GoggleOverlayRendererMixin",
-		"create.PonderTooltipHandlerMixin"
+		"create.GoggleOverlayRendererMixin"/*,
+		"create.PonderTooltipHandlerMixin"*/
 	],
 	"mixins": [
 		"create.BacktankBlockEntityAccess"

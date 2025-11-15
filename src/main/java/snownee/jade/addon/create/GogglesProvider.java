@@ -9,16 +9,18 @@ import com.simibubi.create.content.contraptions.piston.MechanicalPistonBlock;
 import com.simibubi.create.content.contraptions.piston.PistonExtensionPoleBlock;
 import com.simibubi.create.content.equipment.goggles.GoggleOverlayRenderer;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
-import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.fluids.drain.ItemDrainBlockEntity;
 import com.simibubi.create.content.fluids.spout.SpoutBlockEntity;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.trains.entity.TrainRelocator;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
+
+//No longer exist
+//import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+//import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
+//import com.simibubi.create.foundation.utility.Components;
+//import com.simibubi.create.foundation.utility.Iterate;
+//import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -39,9 +41,10 @@ import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElementHelper;
 
+//Disabled for now -Cass
+
 // See GoggleOverlayRenderer
 public class GogglesProvider implements IBlockComponentProvider {
-
 	private static Block block(String id) {
 		return BuiltInRegistries.BLOCK.get(new ResourceLocation(CreatePlugin.ID, id));
 	}
@@ -65,54 +68,54 @@ public class GogglesProvider implements IBlockComponentProvider {
 
 		boolean wearingGoggles = !config.get(CreatePlugin.REQUIRES_GOGGLES) || GogglesItem.isWearingGoggles(accessor.getPlayer());
 
-		/* off */
-		boolean hasGoggleInformation = te instanceof IHaveGoggleInformation
-				&& !(te instanceof SpoutBlockEntity)
-				&& !(te instanceof ItemDrainBlockEntity)
-				&& !(te instanceof BasinBlockEntity)
-				&& (
-				!(te instanceof FluidTankBlockEntity tank) || (tank.getControllerBE() == null) || tank.getControllerBE().boiler.isActive());
-		/* on */
-		boolean hasHoveringInformation = te instanceof IHaveHoveringInformation;
+		// off 
+//		boolean hasGoggleInformation = te instanceof IHaveGoggleInformation
+//				&& !(te instanceof SpoutBlockEntity)
+//				&& !(te instanceof ItemDrainBlockEntity)
+//				&& !(te instanceof BasinBlockEntity)
+//				&& (
+//				!(te instanceof FluidTankBlockEntity tank) || (tank.getControllerBE() == null) || tank.getControllerBE().boiler.isActive());
+		// on
+//		boolean hasHoveringInformation = te instanceof IHaveHoveringInformation;
 
 		boolean goggleAddedInformation = false;
 		boolean hoverAddedInformation = false;
 
 		List<Component> tooltip = new ArrayList<>();
 
-		if (hasGoggleInformation && wearingGoggles) {
-			IHaveGoggleInformation gte = (IHaveGoggleInformation) te;
-			goggleAddedInformation = gte.addToGoggleTooltip(tooltip, accessor.showDetails());
-		}
+//		if (hasGoggleInformation && wearingGoggles) {
+//			IHaveGoggleInformation gte = (IHaveGoggleInformation) te;
+//			goggleAddedInformation = gte.addToGoggleTooltip(tooltip, accessor.showDetails());
+//		}
 
-		if (hasHoveringInformation) {
-			if (!tooltip.isEmpty()) {
-				tooltip.add(Components.immutableEmpty());
-			}
-			IHaveHoveringInformation hte = (IHaveHoveringInformation) te;
-			hoverAddedInformation = hte.addToTooltip(tooltip, accessor.showDetails());
+//		if (hasHoveringInformation) {
+//			if (!tooltip.isEmpty()) {
+//				tooltip.add(Components.immutableEmpty());
+//			}
+//			IHaveHoveringInformation hte = (IHaveHoveringInformation) te;
+//			hoverAddedInformation = hte.addToTooltip(tooltip, accessor.showDetails());
+//
+//			if (goggleAddedInformation && !hoverAddedInformation) {
+//				tooltip.remove(tooltip.size() - 1);
+//			}
+//		}
 
-			if (goggleAddedInformation && !hoverAddedInformation) {
-				tooltip.remove(tooltip.size() - 1);
-			}
-		}
+//		if (te instanceof IDisplayAssemblyExceptions) {
+//			boolean exceptionAdded = ((IDisplayAssemblyExceptions) te).addExceptionToTooltip(tooltip);
+//			if (exceptionAdded) {
+//				hasHoveringInformation = true;
+//				hoverAddedInformation = true;
+//			}
+//		}
 
-		if (te instanceof IDisplayAssemblyExceptions) {
-			boolean exceptionAdded = ((IDisplayAssemblyExceptions) te).addExceptionToTooltip(tooltip);
-			if (exceptionAdded) {
-				hasHoveringInformation = true;
-				hoverAddedInformation = true;
-			}
-		}
-
-		if (!hasHoveringInformation) {
-			hasHoveringInformation = hoverAddedInformation = TrainRelocator.addToTooltip(tooltip, accessor.showDetails());
-		}
+//		if (!hasHoveringInformation) {
+//			hasHoveringInformation = hoverAddedInformation = TrainRelocator.addToTooltip(tooltip, accessor.showDetails());
+//		}
 
 		// break early if goggle or hover returned false when present
-		if ((hasGoggleInformation && !goggleAddedInformation) && (hasHoveringInformation && !hoverAddedInformation)) {
-			return;
-		}
+//		if ((hasGoggleInformation && !goggleAddedInformation) && (hasHoveringInformation && !hoverAddedInformation)) {
+//			return;
+//		}
 
 		tooltip.removeIf(c -> {
 			for (Component sibling : c.getSiblings()) {
@@ -133,25 +136,25 @@ public class GogglesProvider implements IBlockComponentProvider {
 
 		// check for piston poles if goggles are worn
 		BlockState state = world.getBlockState(pos);
-		if (wearingGoggles && state.is(PISTON_EXTENSION_POLE)) {
-			Direction[] directions = Iterate.directionsInAxis(state.getValue(DirectionalBlock.FACING).getAxis());
-			int poles = 1;
-			boolean pistonFound = false;
-			for (Direction dir : directions) {
-				int attachedPoles = PistonExtensionPoleBlock.PlacementHelper.get().attachedPoles(world, pos, dir);
-				poles += attachedPoles;
-				pistonFound |= world.getBlockState(pos.relative(dir, attachedPoles + 1)).getBlock() instanceof MechanicalPistonBlock;
-			}
-
-			if (!pistonFound) {
-				return;
-			}
-			if (!tooltip.isEmpty()) {
-				tooltip.add(Components.immutableEmpty());
-			}
-
-			tooltip.add(Lang.translateDirect("gui.goggles.pole_length").append(Components.literal(" " + poles)));
-		}
+//		if (wearingGoggles && state.is(PISTON_EXTENSION_POLE)) {
+//			Direction[] directions = Iterate.directionsInAxis(state.getValue(DirectionalBlock.FACING).getAxis());
+//			int poles = 1;
+//			boolean pistonFound = false;
+//			for (Direction dir : directions) {
+//				int attachedPoles = PistonExtensionPoleBlock.PlacementHelper.get().attachedPoles(world, pos, dir);
+//				poles += attachedPoles;
+//				pistonFound |= world.getBlockState(pos.relative(dir, attachedPoles + 1)).getBlock() instanceof MechanicalPistonBlock;
+//			}
+//
+//			if (!pistonFound) {
+//				return;
+//			}
+//			if (!tooltip.isEmpty()) {
+//				tooltip.add(Components.immutableEmpty());
+//			}
+//
+//			tooltip.add(Lang.translateDirect("gui.goggles.pole_length").append(Components.literal(" " + poles)));
+//		}
 
 		tooltip.stream().map(c -> {
 			if (c.getString().isBlank()) {
@@ -166,5 +169,4 @@ public class GogglesProvider implements IBlockComponentProvider {
 	public boolean enabledByDefault() {
 		return false;
 	}
-
 }
